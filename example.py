@@ -16,11 +16,14 @@ def visualize():
     import  matplotlib.pyplot as plt
     import os
     import numpy as np
-    name = ['bch','btc','btg','dash','eth','xlm','xrp','zec']
-    for file, name in zip(os.listdir('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data'),name):
-        print(file,name)
+    data = list()
+    for file in os.listdir('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data'):
+        print(file)
         file = 'C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data\\' + file
-        np.load(file,'r')
-    plt.plot()
+        data.append(np.load(file,'r'))
+    plt.plot(data[7])
+    plt.xlabel('time')
+    plt.ylabel('price')
+    
 if __name__ == '__main__':
     visualize()
