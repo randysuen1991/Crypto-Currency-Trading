@@ -4,7 +4,7 @@ I would continue updating the contents as soon as possible.
 
 ## The trend of the cryptocurrency in a period of time.
 They are the prices of BCH, BTC, BTG, DASH, ETH, XLM, XRP, ZEC. <br>
-|![](https://github.com/randysuen1991/Crypto-Currency-Trading/blob/master/figures/bch.png)|
+|![bch.jpg](https://github.com/randysuen1991/Crypto-Currency-Trading/blob/master/figures/bch.png)|
 |:--:| 
 |*bch*|
 ![](https://github.com/randysuen1991/Crypto-Currency-Trading/blob/master/figures/btc.png)
