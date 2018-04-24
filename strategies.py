@@ -25,13 +25,22 @@ class PairTrading():
     def PairTrade(cls, crypto_x, crypto_y, price_x, price_y, amount, lm, sigma, account, **kwargs):
         num_sigma = kwargs.get('num_sigma',2)
         if np.log(price_y) - lm.predict(np.log(price_x)) > num_sigma * sigma :
-            yield from cls.Trade(amount,account)
+            yield from cls.Trade(amount,crypto_x,crypto_y,account,cond='over')
         elif np.log(price_y) - lm.predict(np.log(price_x)) < num_sigma * sigma :
-            yield from cls.Trade()
+            yield from cls.Trade(amount,crypto_x,crypto_y,account,cond='under')
             
             
     @classmethod
     @asyncio.coroutine
-    def Trade(cls, amount, crypto_x, crypto_y, account):
-        if account[crypto_x] >
-    
+    def Trade(cls, amount, crypto_x, crypto_y, account,cond):
+        if cond == 'over' : 
+            crypto = lambda x, y: x if x > y else y
+            yield from WS.send(Request.Place_Order(crypto=crypto(crypto_x,crypto_y,amount)))
+            if account[crypto_y] > account[crypto_x] :
+                yield from WS.send(Request.Place_Order(crpyto_y,amount,price,type='sell'))
+            else :
+                yield from WS.send(Request.Place_Order(crypto_x,amount,price,type='buy'))
+                
+        elif cond == 'under' :
+            
+            pass
