@@ -1,3 +1,5 @@
+import json
+
 #The functions in the class would return the requests spicified by the users.
 class Request():
     def Pong():
