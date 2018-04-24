@@ -2,7 +2,12 @@ import numpy as np
 
 
 class PairTrading():
-    def ss:
+    @classmethod
+    def LogistLinearRegression(cls,pa,pb):
+        pass
+    
+    @classmethod
+    def dd():
         pass
     
     
