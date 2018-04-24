@@ -15,12 +15,12 @@ def example2():
 def visualize():
     import  matplotlib.pyplot as plt
     import os
-    import sys
     import numpy as np
-    sys.path.append('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data')
     name = ['bch','btc','btg','dash','eth','xlm','xrp','zec']
     for file, name in zip(os.listdir('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data'),name):
         print(file,name)
-        np.load(file,name)
+        file = 'C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data\\' + file
+        np.load(file,'r')
+    plt.plot()
 if __name__ == '__main__':
     visualize()
