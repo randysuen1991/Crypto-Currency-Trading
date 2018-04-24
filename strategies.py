@@ -32,15 +32,15 @@ class PairTrading():
             
     @classmethod
     @asyncio.coroutine
-    def Trade(cls, amount, crypto_x, crypto_y, account,cond):
+    def Trade(cls, amount, crypto_x, crypto_y, account, cond):
         if cond == 'over' : 
-            crypto = lambda x, y: x if x > y else y
-            yield from WS.send(Request.Place_Order(crypto=crypto(crypto_x,crypto_y,amount)))
             if account[crypto_y] > account[crypto_x] :
-                yield from WS.send(Request.Place_Order(crpyto_y,amount,price,type='sell'))
+                yield from WS.send(Request.Place_Order(crypto_y,amount,price,type='sell'))
             else :
                 yield from WS.send(Request.Place_Order(crypto_x,amount,price,type='buy'))
-                
         elif cond == 'under' :
+            if account[crypto_y] > account[crypto_x] :
+                yield from WS.send(Request.Place_Order(crypto_y,amount,price,type='buy'))
+            else :
+                yield from WS.send(Request.Place_Order(crypto_x,amount,price,type='sell'))
             
-            pass
