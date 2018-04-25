@@ -21,45 +21,24 @@ def example3():
 
 def visualize():
     import  matplotlib.pyplot as plt
-    import os
+#    import sys
     import numpy as np
     from statsmodels.tsa.stattools import adfuller
     from strategies import PairTrading
     
     
+#    sys.path.append('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data\\')
     
-    
-    
-    data = list()
-    for file in os.listdir('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data'):
-        print(file)
-        file = 'C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data\\' + file
-        data.append(np.load(file,'r'))
-    
-    standardized_data = list()
-    #standardize the data
-    for data_single in data :
-        m = np.mean(data_single)
-        s = np.std(data_single)
-        new_list = [(d-m)/s for d in data_single]
-        standardized_data.append(new_list)
-#    print(np.std(standardized_data[0]))
-        
-    c1 = 1
-    c2 = 6
-    lm, difference = PairTrading.LogistLinearRegression(data[c1],data[c2])
-    
-    
-#    difference = [a-b for a, b in zip(standardized_data[c1],standardized_data[c2])]
-    
-    plt.plot(difference,'-b',label='residual')
+    data = np.load('data2.npy')
+    lm, res = PairTrading.LogistLinearRegression(data['BTC'],data['XRP'])
+    plt.plot(res,'-b',label='residual')
+    result = adfuller(res)
     plt.legend(loc=0)
-    result = adfuller(difference)
     print(result[0],result[1])
 
-#    plt.xlabel('time')
-#    plt.ylabel('price')
+    plt.xlabel('time')
+    plt.ylabel('price')
     
 if __name__ == '__main__':
-#    visualize()
-    example3()
+    visualize()
+#    example3()
