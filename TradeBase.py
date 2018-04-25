@@ -67,7 +67,8 @@ class Trader(object):
         
     def Connect(self):
         asyncio.ensure_future(self._Connect())
-    
+        
+        
     @asyncio.coroutine
     def _Connect(self):
         
@@ -174,7 +175,7 @@ class Trader(object):
     
     
     @asyncio.coroutine
-    def _Send_Ticker_Append_Reuslt(self,crypto):
+    def _Send_Ticker_Append_Result(self,crypto):
         yield from self.ws.send(Request.Ticker(crypto,'USD'))
         result_json = yield from self.ws.recv()
         try:
@@ -194,34 +195,48 @@ class Trader(object):
         
         
         
-    def PairTrade(self,crypto,money='USD',delay_time,num_data,num_sigma,amount):
-        asyncio.ensure_future(self._PairTrade(crypto,money,delay_time,num_data,num_sigma,amount))
+    def PairTrade(self,crypto_x,crypto_y,delay_time,num_data,num_sigma,amount,money='USD'):
+        asyncio.ensure_future(self._PairTrade(crypto_x,crypto_y,money,delay_time,num_data,num_sigma,amount))
     
     @asyncio.coroutine
-    def _PairTrade(self,crypto_x,crypto_y,money,delay_time,num_sigma,amount):
+    def _PairTrade(self,crypto_x,crypto_y,money,delay_time,num_data,num_sigma,amount):
         self.buffer[crypto_x] = list()
         self.buffer[crypto_y] = list()
         
         yield from asyncio.sleep(3)
+        
+        
+        
+        # Get the information of my account
+        yield from self.ws.send(Request.Get_Balance())
+        result_json = yield from self.ws.recv()
+        result = json.loads(result_json)
+        self.account = result['data']['balance']
+        print(self.account)
         count = 0
         try :
             while True:
-                
                 yield from asyncio.wait([
                                         self._Send_Ticker_Append_Result(crypto_x),
                                         self._Send_Ticker_Append_Result(crypto_y)
                                         ])
-                lm, res = PairTrading.LogistLinearRegression(self.buffer[crypto_x][0:250],self.buffer[crypto_y][0:250])
-                sigma = np.std(res)
-                yield from PairTrading.PairTrade(crypto_x,crypto_y,self.buffer[crypto_x][-1],self.buffer[xrypto_y][-1],lm=lm,amount=amount,sigma=sigma,account=self.account,num_sigma=num_sigma)
+    
+                print(self.buffer)
+                if len(self.buffer[crypto_x]) > 2 :
+                    lm, res = PairTrading.LogistLinearRegression(self.buffer[crypto_x][0:250],self.buffer[crypto_y][0:250])
+                    sigma = np.std(res)
+                    if sigma > 0 :
+                        yield from PairTrading.PairTrade(crypto_x,crypto_y,self.buffer[crypto_x][-1],self.buffer[crypto_y][-1],lm=lm,amount=amount,sigma=sigma,account=self.account,num_sigma=num_sigma)
                     
                 count += 1
                 if count ==  num_data :
                     break
                 else :
                     yield from self._Sleep(delay_time)
-        except :
-            pass
+                    
+                    
+        except AttributeError:
+            raise NotImplementedError('You should Connect to the server first.')
         
         finally :
             pass

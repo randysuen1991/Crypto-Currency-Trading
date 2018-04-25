@@ -11,7 +11,14 @@ def example2():
     trader.Connect()
     trader.Subscribe_Order_Book(crypto='XRP',money='USD',depth=10,subscribe=True,delay_time=1)
     trader.Start()
-    
+
+
+def example3():
+    trader = TradeBase.Trader()
+    trader.Connect()
+    trader.PairTrade(crypto_x='BTC',crypto_y='XRP',money='USD',delay_time=10,num_data=300,num_sigma=100,amount=40)
+    trader.Start()
+
 def visualize():
     import  matplotlib.pyplot as plt
     import os
@@ -54,5 +61,5 @@ def visualize():
 #    plt.ylabel('price')
     
 if __name__ == '__main__':
-    visualize()
-#    example1()
+#    visualize()
+    example3()

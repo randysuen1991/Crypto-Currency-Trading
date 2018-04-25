@@ -7,7 +7,7 @@ class Request():
     def Ticker(crypto,money='USD'):
         return json.dumps({'e':'ticker','data':[crypto,money]})
     def Get_Balance():
-        return json.dumps({'e':'get-baclance'})
+        return json.dumps({'e':'get-balance'})
     def Order_Book(crypto,money='USD',subscribe=False,depth=-1):
         return json.dumps({
                             'e':'order-book-subscribe',

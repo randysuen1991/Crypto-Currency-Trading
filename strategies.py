@@ -25,10 +25,12 @@ class PairTrading():
     @classmethod
     @asyncio.coroutine
     def PairTrade(cls, crypto_x, crypto_y, price_x, price_y, amount, lm, sigma, account, num_sigma):
-        if np.log(price_y) - lm.predict(np.log(price_x)) > num_sigma * sigma :
-            yield from cls.Trade(amount,crypto_x,crypto_y,price_x,price_y,account,cond='over')
-        elif np.log(price_y) - lm.predict(np.log(price_x)) <= - num_sigma * sigma :
-            yield from cls.Trade(amount,crypto_x,crypto_y,price_x,price_y,account,cond='under')
+        print(num_sigma,sigma)
+        print(np.log(price_y) - lm.predict(np.log(price_x)),num_sigma * sigma )
+#        if np.log(price_y) - lm.predict(np.log(price_x)) > num_sigma * sigma :
+#            yield from cls.Trade(amount,crypto_x,crypto_y,price_x,price_y,account,cond='over')
+#        elif np.log(price_y) - lm.predict(np.log(price_x)) <= - num_sigma * sigma :
+#            yield from cls.Trade(amount,crypto_x,crypto_y,price_x,price_y,account,cond='under')
             
             
             
