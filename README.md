@@ -9,4 +9,5 @@ The first two figures are the prices of BTC and XRP in a period of time on 4/24/
 ![](https://github.com/randysuen1991/Crypto-Currency-Trading/blob/master/figures/xrp.png)<br>
 
 The following figure is log(price_btc) - ( alpha + beta * log(price_xrp) ), where alpha and beta are obtained by least square.<br>
+The p-value of ADFuller test is 0.0015 < 0.05. So we might be able to assume the residual is stationary process.
 ![](https://github.com/randysuen1991/Crypto-Currency-Trading/blob/master/figures/res_btc_xrp.png)
