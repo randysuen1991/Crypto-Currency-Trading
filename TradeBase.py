@@ -5,8 +5,9 @@ import json
 import websockets as WS
 import asyncio
 import pickle
+import numpy as np
 from Requests import Request
-
+from strategies import PairTrading
     
 class Trader(object):
 
@@ -18,7 +19,7 @@ class Trader(object):
         self.orders = dict()
         self.complete = False
         self.iteration = 0
-        self.buffer = list()
+        self.buffer = dict()
         # We should add a more method to unpickle the dictionary (i.e load data into a trader.training_data) from the directory.
         self.training_data = {
                                 'BTC':{'high':[],'low':[],'last':[]},
@@ -173,23 +174,47 @@ class Trader(object):
     
     
     @asyncio.coroutine
-    def _Send_Ticker_Compute_Reuslt(crypto):
+    def _Send_Ticker_Append_Reuslt(self,crypto):
+        yield from self.ws.send(Request.Ticker(crypto,'USD'))
+        result_json = yield from self.ws.recv()
+        try:
+            result = json.loads(result_json)['data']
+        # KeyError would happen when the 'ping pong' problem happens. So, just save the current data.
+        except KeyError:
+            print('Ping Pong problem occurs.')
+            self.loop.stop()
+            
         
-    
-    def PairTrade(self,crypto,money='USD',delay_time,num_data):
-        asyncio.ensure_future(self._PairTrade(crypto,money,delay_time,num_data))
+        
+        # I use last 250 data as the traing for the new realization.
+        if len(self.buffer[crypto]) == 251 :
+            self.buffer[crypto].pop()
+            
+        self.buffer[crypto].append(float(result['last']))
+        
+        
+        
+    def PairTrade(self,crypto,money='USD',delay_time,num_data,num_sigma,amount):
+        asyncio.ensure_future(self._PairTrade(crypto,money,delay_time,num_data,num_sigma,amount))
     
     @asyncio.coroutine
-    def _PairTrade(crypto_x,crypto_y,money,delay_time):
+    def _PairTrade(self,crypto_x,crypto_y,money,delay_time,num_sigma,amount):
+        self.buffer[crypto_x] = list()
+        self.buffer[crypto_y] = list()
+        
         yield from asyncio.sleep(3)
         count = 0
         try :
             while True:
                 
                 yield from asyncio.wait([
-                                        self._Send_Ticker_Compute_Result(crypto_x)
-                                        self._Send_Ticker_Compute_Result(crypto_y)
+                                        self._Send_Ticker_Append_Result(crypto_x),
+                                        self._Send_Ticker_Append_Result(crypto_y)
                                         ])
+                lm, res = PairTrading.LogistLinearRegression(self.buffer[crypto_x][0:250],self.buffer[crypto_y][0:250])
+                sigma = np.std(res)
+                yield from PairTrading.PairTrade(crypto_x,crypto_y,self.buffer[crypto_x][-1],self.buffer[xrypto_y][-1],lm=lm,amount=amount,sigma=sigma,account=self.account,num_sigma=num_sigma)
+                    
                 count += 1
                 if count ==  num_data :
                     break
