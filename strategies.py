@@ -12,7 +12,9 @@ class PairTrading():
     def LogistLinearRegression(cls,price_x,price_y):
         lm = linear_model.LinearRegression()
         logy = np.log(price_y)
+        logy = logy.reshape(-1,1)
         logx = np.log(price_x)
+        logx = logx.reshape(-1,1)
         lm.fit(logx,logy)
         res_train = logy - lm.predict(logx)
         return lm, res_train
