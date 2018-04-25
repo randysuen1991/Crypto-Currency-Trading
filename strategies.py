@@ -17,7 +17,7 @@ class PairTrading():
         logx = logx.reshape(-1,1)
         lm.fit(logx,logy)
         res_train = logy - lm.predict(logx)
-        return lm, res_train
+        return lm, res_train.ravel()
     
     
     # The amount should be the number we are gonna trade, lm is the linear model, and the account should 

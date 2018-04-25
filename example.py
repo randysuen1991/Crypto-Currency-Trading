@@ -41,9 +41,9 @@ def visualize():
     c1 = 1
     c2 = 6
     lm, difference = PairTrading.LogistLinearRegression(data[c1],data[c2])
-    difference = difference.ravel()
     
-    difference = [a-b for a, b in zip(standardized_data[c1],standardized_data[c2])]
+    
+#    difference = [a-b for a, b in zip(standardized_data[c1],standardized_data[c2])]
     
     plt.plot(difference,'-b',label='residual')
     plt.legend(loc=0)
