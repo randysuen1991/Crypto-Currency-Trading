@@ -21,24 +21,22 @@ def example3():
 
 def visualize():
     import  matplotlib.pyplot as plt
-#    import sys
     import numpy as np
     from statsmodels.tsa.stattools import adfuller
     from strategies import PairTrading
+    import pickle
+    
+    with open('data2dict','rb') as file :
+        data = pickle.load(file)
     
     
-#    sys.path.append('C:\\Users\\ASUS\\Dropbox\\pycode\\mine\\Crypto-Currency-Trading\\data\\')
-    
-    data = np.load('data2.npy')
     lm, res = PairTrading.LogistLinearRegression(data['BTC'],data['XRP'])
     plt.plot(res,'-b',label='residual')
     result = adfuller(res)
     plt.legend(loc=0)
-    print(result[0],result[1])
-
     plt.xlabel('time')
     plt.ylabel('price')
-    
+    print(result[0],result[1])
 if __name__ == '__main__':
     visualize()
 #    example3()
