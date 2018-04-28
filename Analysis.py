@@ -8,3 +8,6 @@ class Analysis():
     def Correlation(X,Y):
         c_c = np.corrcoef(X,Y)
         return c_c
+    
+class BackTest():
+    pass
